@@ -16,12 +16,28 @@ def make_line(x1, x2, y1, y2, coler):
         make_pexel(x, y, coler)
         t += 0.02
 def make_circle(x, y, radius, coler):
-    for s in range(0, 360, 1):
-        rad = math.radians(s)
-        x_pos = x + radius * math.cos(rad)
-        y_pos = y + radius * math.sin(rad)
-        make_pexel(x_pos, y_pos, coler)
-        
+    
+    X = -radius
+    #for X in range(-radius, radius, 0.1):
+    #for X in range(-radius, radius + 1, 0.1):
+    while X <= radius:
+        #x**2 + y**2 == radius**2
+        y = sqrt(radius**2 - X**2)
+        ##y = -sqrt(radius**2 - x**2)
+        make_pexel(X, y, coler)
+        make_pexel(X, -y, coler)
+        X += 0.01
+
+    Y = -radius
+
+    while Y <= radius:
+        #x**2 + y**2 == radius**2
+        x = sqrt(radius**2 - Y**2)
+        ##y = -sqrt(radius**2 - x**2)
+        make_pexel(x, Y, coler)
+        make_pexel(-x, Y, coler)
+        Y += 0.01
+
 def make_rectangle(x, y, width, height, coler):
     for i in range(width + 1):
         make_pexel(x + i * 0.1, y, coler)
