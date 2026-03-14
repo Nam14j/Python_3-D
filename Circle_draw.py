@@ -1,7 +1,7 @@
 
 from ursina import *
 
-app = Ursina(fullscreen=True)
+app = Ursina(fullscreen=False)
 
 Entity(model='quad', scale=100, collider='box', color=color.black)
 
@@ -15,6 +15,7 @@ def make_line(x1, x2, y1, y2, coler):
         y = y1 + t * (y2 - y1)
         make_pexel(x, y, coler)
         t += 0.02
+
 def make_circle(x, y, radius, coler):
     
     X = -radius
@@ -27,6 +28,7 @@ def make_circle(x, y, radius, coler):
         make_pexel(X, y, coler)
         make_pexel(X, -y, coler)
         X += 0.01
+        make_line(X, X, y, -y, coler)
 
     Y = -radius
 
@@ -37,6 +39,9 @@ def make_circle(x, y, radius, coler):
         make_pexel(x, Y, coler)
         make_pexel(-x, Y, coler)
         Y += 0.01
+        make_line(x, -x, Y, Y, coler)
+
+
 
 def make_rectangle(x, y, width, height, coler):
     for i in range(width + 1):
@@ -55,6 +60,6 @@ def update():
     if held_keys['left mouse']:
         if mouse.world_point:
             pos = mouse.world_point
-            make_circle(pos.x, pos.y, 4, color.white)
+            make_circle(pos.x, pos.y, 2, color.white)
 
 app.run()
