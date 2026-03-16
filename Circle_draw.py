@@ -1,12 +1,12 @@
+from math import sqrt
+import pygame
 
-from ursina import *
-
-app = Ursina(fullscreen=False)
-
-Entity(model='quad', scale=100, collider='box', color=color.black)
+pygame.init()
+screen = pygame.display.set_mode((800, 600))
+pygame.display.set_caption("Drawing with Pixels")
 
 def make_pexel(x, y, coler, z=0):
-    return Entity(model='quad', color=coler, scale=(0.1, 0.1, 0.1), position=(x, y, z))
+    pygame.draw.rect(screen, coler, (x * 10, y * 10, 10, 10))
 
 def make_line(x1, x2, y1, y2, coler):
     t = 0
@@ -17,49 +17,43 @@ def make_line(x1, x2, y1, y2, coler):
         t += 0.02
 
 def make_circle(x, y, radius, coler):
-    
     X = -radius
-    #for X in range(-radius, radius, 0.1):
-    #for X in range(-radius, radius + 1, 0.1):
     while X <= radius:
-        #x**2 + y**2 == radius**2
-        y = sqrt(radius**2 - X**2)
-        ##y = -sqrt(radius**2 - x**2)
-        make_pexel(X, y, coler)
-        make_pexel(X, -y, coler)
-        X += 0.01
-        make_line(X, X, y, -y, coler)
+        Y = sqrt(radius**2 - X**2)
+        make_pexel(x + X, y + Y, coler)
+        make_pexel(x + X, y - Y, coler)
+        make_line(x + X, x + X, y + Y, y - Y, coler)
+        X += 0.1
 
     Y = -radius
-
     while Y <= radius:
-        #x**2 + y**2 == radius**2
-        x = sqrt(radius**2 - Y**2)
-        ##y = -sqrt(radius**2 - x**2)
-        make_pexel(x, Y, coler)
-        make_pexel(-x, Y, coler)
-        Y += 0.01
-        make_line(x, -x, Y, Y, coler)
-
-
+        X = sqrt(radius**2 - Y**2)
+        make_pexel(x + X, y + Y, coler)
+        make_pexel(x - X, y + Y, coler)
+        make_line(x + X, x - X, y + Y, y + Y, coler)
+        Y += 0.1
 
 def make_rectangle(x, y, width, height, coler):
     for i in range(width + 1):
         make_pexel(x + i * 0.1, y, coler)
-
     for i in range(width + 1):
         make_pexel(x + i * 0.1, y + height * 0.1, coler)
-
     for i in range(height + 1):
         make_pexel(x, y + i * 0.1, coler)
-
     for i in range(height + 1):
         make_pexel(x + width * 0.1, y + i * 0.1, coler)
 
 def update():
-    if held_keys['left mouse']:
-        if mouse.world_point:
-            pos = mouse.world_point
-            make_circle(pos.x, pos.y, 2, color.white)
+    if pygame.mouse.get_pressed()[0]:
+        pos = pygame.mouse.get_pos()
+        make_circle(pos[0] / 10, pos[1] / 10, 7, (255, 255, 255))
+    pygame.display.flip()
 
-app.run()
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+    update()
+
+pygame.quit()
