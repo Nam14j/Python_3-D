@@ -14,7 +14,7 @@ def make_line(x1, x2, y1, y2, coler):
         x = x1 + t * (x2 - x1)
         y = y1 + t * (y2 - y1)
         make_pexel(x, y, coler)
-        t += 0.02
+        t += 0.01
 
 def make_circle(x, y, radius, coler):
     X = -radius
@@ -43,10 +43,18 @@ def make_rectangle(x, y, width, height, coler):
     for i in range(height + 1):
         make_pexel(x + width * 0.1, y + i * 0.1, coler)
 
+def make_triangle(x1, y1, x2, y2, x3, y3, coler):
+    make_line(x1, x2, y1, y2, coler)
+    make_line(x2, x3, y2, y3, coler)
+    make_line(x3, x1, y3, y1, coler)
+
 def update():
+    screen.fill((0, 0, 0))
     if pygame.mouse.get_pressed()[0]:
         pos = pygame.mouse.get_pos()
-        make_circle(pos[0] / 10, pos[1] / 10, 7, (255, 255, 255))
+        x = pos[0] / 10
+        y = pos[1] / 10
+        make_triangle(x, y, x + 5, y, x + 2.5, y + 5, (255, 0, 0))
     pygame.display.flip()
 
 running = True
