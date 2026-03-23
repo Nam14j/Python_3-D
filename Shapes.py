@@ -6,7 +6,7 @@ screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("Drawing with Pixels")
 
 def make_pexel(x, y, coler, z=0):
-    pygame.draw.rect(screen, coler, (x * 10, y * 10, 10, 10))
+    pygame.draw.rect(screen, coler, (int(x * 10), int(y * 10), 10, 10))
 
 def make_line(x1, x2, y1, y2, coler):
     t = 0
@@ -34,19 +34,26 @@ def make_circle(x, y, radius, coler):
         Y += 0.1
 
 def make_rectangle(x, y, width, height, coler):
-    for i in range(width + 1):
-        make_pexel(x + i * 0.1, y, coler)
-    for i in range(width + 1):
-        make_pexel(x + i * 0.1, y + height * 0.1, coler)
-    for i in range(height + 1):
-        make_pexel(x, y + i * 0.1, coler)
-    for i in range(height + 1):
-        make_pexel(x + width * 0.1, y + i * 0.1, coler)
+    width = int(width)
+    height = int(height)
 
-def make_triangle(x1, y1, x2, y2, x3, y3, coler):
+    for i in range(width + 1):
+        make_pexel(x + i, y, coler)
+        make_pexel(x + i, y + height, coler)
+
+    for i in range(height + 1):
+        make_pexel(x, y + i, coler)
+        make_pexel(x + width, y + i, coler)
+
+def make_triangle_and_rectangle_around(x1, y1, x2, y2, x3, y3, coler):
     make_line(x1, x2, y1, y2, coler)
     make_line(x2, x3, y2, y3, coler)
     make_line(x3, x1, y3, y1, coler)
+    min_x = min(x1, x2, x3)
+    max_x = max(x1, x2, x3)
+    min_y = min(y1, y2, y3)
+    max_y = max(y1, y2, y3)
+    make_rectangle(min_x, min_y, max_x - min_x, max_y - min_y, (0, 0, 255))
 
 def update():
     screen.fill((0, 0, 0))
@@ -54,7 +61,7 @@ def update():
         pos = pygame.mouse.get_pos()
         x = pos[0] / 10
         y = pos[1] / 10
-        make_triangle(x, y, x + 5, y, x + 2.5, y + 5, (255, 0, 0))
+        make_triangle_and_rectangle_around(x, y, x + 20, y, x + 5, y + 10, (255, 0, 0))
     pygame.display.flip()
 
 running = True
