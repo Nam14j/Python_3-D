@@ -17,7 +17,10 @@ while running:
             running = False
         
         if event.type == pygame.KEYDOWN:
-            letters.append(event.unicode)
+            if event.key == pygame.K_BACKSPACE:
+                letters.pop()
+            else:
+                letters.append(event.unicode)
     
     text_string = "".join(letters)
     text_surface = font.render(text_string, True, (0, 0, 0))
